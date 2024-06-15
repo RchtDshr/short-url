@@ -1,6 +1,6 @@
 const { nanoid } = require('nanoid');
+
 const URL = require('../model/urlmodel');
-const { model } = require('mongoose');
 
 async function handleGenerateNewShortURL(req, res) {
     const body = req.body;
@@ -12,8 +12,8 @@ async function handleGenerateNewShortURL(req, res) {
         redirectURL: body.url,
         visitHistory: []
     })
-
-    return res.json({ id: shortURL });
+    return res.render('home', {id: shortURL})
+    // return res.json({ id: shortURL });
 }
 
 async function handleGetAnaytics(req, res) {
