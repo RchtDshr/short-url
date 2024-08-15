@@ -2,9 +2,14 @@ const express = require('express')
 const connectMongo = require('./connection')
 const path = require('path')
 
+//cookie parser
+const cookieParser = require('cookie-parser');
+
 const urlRoute = require('./routes/urlroutes')
 const staticRouter = require('./routes/staticRouter')
 const userRoute = require('./routes/userroutes')
+
+const {restrictToLoggedInUser, checkAuth} = require('./middleware/auth')
 
 const URL = require('./model/urlmodel')
 
@@ -26,19 +31,12 @@ app.set('views', path.resolve('./views'));
 // TypeError: Cannot read properties of undefined (reading 'url') 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 // all routes starting from /url/ 
-app.use('/url', urlRoute);
+app.use('/url', restrictToLoggedInUser, urlRoute);
 app.use('/user', userRoute);
-app.use('/', staticRouter);
-
-// for ui 
-// app.get('/ui/test', async (req, res) => {
-//     const allUrls = await URL.find({})
-//     return res.render("home",{
-//         urls: allUrls,
-//     })
-// })
+app.use('/', checkAuth , staticRouter);
 
 // route for /shortID 
 // creating a get route to redirect 
