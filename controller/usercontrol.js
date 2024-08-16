@@ -17,11 +17,17 @@ async function handleUserLogin(req, res){
 
     if(!user) return res.render("login", {error: "Invalid user or password"});
 
-    const sessionId = uuidv4();
-    setUser(sessionId, user);
+    // created a session id to handle statefull authentication
+    // const sessionId = uuidv4();
+    // setUser(sessionId, user);
+
+    //using jwt to handle stateless authentication
+    const token = setUser(user);
 
     //sending a cookie with name uid and sessionID as its unique session id linked to a specific user
-    res.cookie('uid', sessionId)
+    // res.cookie('uid', sessionId) for statefull authentication we send uid and sessionId to handle state
+
+    res.cookie('uid', token) // for stateless authentication we sent jwt token in authentication
     return res.redirect('/');
 
 }

@@ -16,7 +16,7 @@ async function restrictToLoggedInUser(req, res, next) {
 async function checkAuth(req, res, next) {
     const userUuid = req.cookies?.uid; //agar cookie hai toh hi uid read karo
 
-    const user = getUser(userUuid);
+    const user = await getUser(userUuid);
 
     req.user = user;
     next();
