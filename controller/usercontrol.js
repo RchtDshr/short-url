@@ -27,8 +27,13 @@ async function handleUserLogin(req, res){
     //sending a cookie with name uid and sessionID as its unique session id linked to a specific user
     // res.cookie('uid', sessionId) for statefull authentication we send uid and sessionId to handle state
 
-    res.cookie('uid', token) // for stateless authentication we sent jwt token in authentication
-    return res.redirect('/');
+    // res.cookie('uid', token) // for stateless authentication we sent jwt token in authentication
+    // return res.redirect('/');
+
+    //instead of making cookie we are sending tokens, 
+    console.log("login token: ", token);
+    
+    return res.json({token})
 
 }
 
