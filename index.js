@@ -9,7 +9,7 @@ const urlRoute = require('./routes/urlroutes')
 const staticRouter = require('./routes/staticRouter')
 const userRoute = require('./routes/userroutes')
 
-const {restrictToLoggedInUser, checkAuth} = require('./middleware/auth')
+const { checkforAuthentication, restrictTo } = require('./middleware/auth')
 
 const URL = require('./model/urlmodel')
 
@@ -32,11 +32,13 @@ app.set('views', path.resolve('./views'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(checkforAuthentication)  //use this middleware everytime
+
 
 // all routes starting from /url/ 
-app.use('/url', restrictToLoggedInUser, urlRoute);
+app.use('/url',restrictTo(['USER']), urlRoute);
 app.use('/user', userRoute);
-app.use('/', checkAuth , staticRouter);
+app.use('/' , staticRouter);
 
 // route for /shortID 
 // creating a get route to redirect 
